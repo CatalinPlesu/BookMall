@@ -105,22 +105,22 @@ namespace BookMall.Web.Controllers
             SessionStatus();
             var user = (UProfileData)System.Web.HttpContext.Current?.Session["__SessionObject"];
 
-            PDbTable data = new PDbTable
-            {
-                OwnerId = user.Id,
-                Title = book.Title,
-                Author = book.Author,
-                Genre = book.Genre,
-                ImageUrl = book.ImageUrl,
-                PdfUrl = book.PdfUrl,
-                JpgFile = book.JpgFile,
-                PdfFile = book.PdfFile,
-                Price = book.Price,
-                Pages = book.Pages,
-                ISBN = book.ISBN
-            };
+            PDbTableBuilder builder = new PDbTableBuilder();
 
-            var bookCreate = _product.CreateProduct(data);
+            var bookCreate = _product.CreateProduct(builder
+                                                    .SetOwnerId(user.Id)
+                                                    .SetTitle(book.Title)
+                                                    .SetAuthor(book.Author)
+                                                    .SetGenre(book.Genre)
+                                                    .SetImageUrl(book.ImageUrl)
+                                                    .SetPdfUrl(book.PdfUrl)
+                                                    .SetJpgFile(book.JpgFile)
+                                                    .SetPdfFile(book.PdfFile)
+                                                    .SetPrice(book.Price)
+                                                    .SetPages(book.Pages)
+                                                    .SetISBN(book.ISBN).Build()
+                                                    );
+
             if (bookCreate.Status)
             {
                 return RedirectToAction("Index", "Home");
